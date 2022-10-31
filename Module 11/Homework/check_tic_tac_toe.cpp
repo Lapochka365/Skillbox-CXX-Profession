@@ -30,6 +30,24 @@ int countSymbolInRow(const std::string& row, char symbol)
 }
 
 
+bool checkTableAndCountXO(const std::string table[3], int &count_X, int &count_O)
+{
+    bool good_row;
+    for (int i = 0; i < table->length(); i++)
+    {
+        good_row = table[i].length() == 3 && checkRowForSymbols(table[i]);
+        count_X += countSymbolInRow(table[i], 'X');
+        count_O += countSymbolInRow(table[i], 'O');
+        if (!good_row)
+        {
+            std::cout << "Incorrect" << std::endl;
+            break;
+        }
+    }
+    return good_row;
+}
+
+
 char findWinner(std::string field)
 {
     char first_sym = field[0];
@@ -125,20 +143,10 @@ int main()
         }
         if (rows[0] == "quit") break;
 
-        bool good_row;
         int count_X = 0, count_O = 0;
-        for (const std::string& row : rows)
-        {
-            good_row = row.length() == 3 && checkRowForSymbols(row);
-            count_X += countSymbolInRow(row, 'X');
-            count_O += countSymbolInRow(row, 'O');
-            if (!good_row)
-            {
-                std::cout << "Incorrect" << std::endl;
-                break;
-            }
-        }
-        if (good_row)
+        bool good_table = checkTableAndCountXO(rows, count_X, count_O);
+
+        if (good_table)
         {
             char columns[3] = {};
             for (int i = 0; i < 3; i++)
@@ -158,7 +166,6 @@ int main()
 
             int count_won_X = 0, count_won_O = 0;
             countWins(columns, row_won, diagonals, count_won_X, count_won_O);
-
             showResultMessage(count_won_X, count_won_O, count_X, count_O);
         }
     }
