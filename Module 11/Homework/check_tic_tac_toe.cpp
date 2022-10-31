@@ -67,6 +67,51 @@ std::string getDiagonal(std::string rows[3], int n_th_diagonal)
 }
 
 
+void countWins(
+        const char columns[],
+        const char rows[],
+        const char diagonals[],
+        int &count_won_X,
+        int &count_won_O
+        )
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (i < 2)
+        {
+            if (columns[i] == 'X' || rows[i] == 'X' || diagonals[i] == 'X') count_won_X += 1;
+            else if (columns[i] == 'O' || rows[i] == 'O' || diagonals[i] == 'O') count_won_O += 1;
+        }
+        else
+        {
+            if (columns[i] == 'X' || rows[i] == 'X') count_won_X += 1;
+            else if (columns[i] == 'O' || rows[i] == 'O') count_won_O += 1;
+        }
+    }
+}
+
+
+void showResultMessage(int count_won_X, int count_won_O, int count_X, int count_O)
+{
+    if (count_won_X == 0 && count_won_O == 0)
+    {
+        if (count_X >= count_O) std::cout << "Nobody" << std::endl;
+        else std::cout << "Incorrect" << std::endl;
+    }
+    else if (count_won_X == 1 && count_won_O == 0)
+    {
+        if (count_X - 1 == count_O) std::cout << "Petya won" << std::endl;
+        else std::cout << "Incorrect" << std::endl;
+    }
+    else if (count_won_X == 0 && count_won_O == 1)
+    {
+        if (count_X == count_O) std::cout << "Vanya won" << std::endl;
+        else std::cout << "Incorrect" << std::endl;
+    }
+    else std::cout << "Incorrect" << std::endl;
+}
+
+
 int main()
 {
     while (true)
@@ -112,35 +157,9 @@ int main()
             }
 
             int count_won_X = 0, count_won_O = 0;
-            for (int i = 0; i < 3; i++)
-            {
-                if (i < 2)
-                {
-                    if (columns[i] == 'X' || row_won[i] == 'X' || diagonals[i] == 'X') count_won_X += 1;
-                    else if (columns[i] == 'O' || row_won[i] == 'O' || diagonals[i] == 'O') count_won_O += 1;
-                }
-                else
-                {
-                    if (columns[i] == 'X' || row_won[i] == 'X') count_won_X += 1;
-                    else if (columns[i] == 'O' || row_won[i] == 'O') count_won_O += 1;
-                }
-            }
-            if (count_won_X == 0 && count_won_O == 0)
-            {
-                if (count_X >= count_O) std::cout << "Nobody" << std::endl;
-                else std::cout << "Incorrect" << std::endl;
-            }
-            else if (count_won_X == 1 && count_won_O == 0)
-            {
-                if (count_X - 1 == count_O) std::cout << "Petya won" << std::endl;
-                else std::cout << "Incorrect" << std::endl;
-            }
-            else if (count_won_X == 0 && count_won_O == 1)
-            {
-                if (count_X == count_O) std::cout << "Vanya won" << std::endl;
-                else std::cout << "Incorrect" << std::endl;
-            }
-            else std::cout << "Incorrect" << std::endl;
+            countWins(columns, row_won, diagonals, count_won_X, count_won_O);
+
+            showResultMessage(count_won_X, count_won_O, count_X, count_O);
         }
     }
 }
